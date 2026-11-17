@@ -47,6 +47,10 @@
         {
           "type": "SYMBOL",
           "name": "ignore_directive"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "godebug_directive"
         }
       ]
     },
@@ -117,8 +121,11 @@
           }
         },
         {
-          "type": "STRING",
-          "value": "\""
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "\""
+          }
         }
       ]
     },
@@ -136,7 +143,7 @@
             "members": [
               {
                 "type": "PATTERN",
-                "value": "[^xuU]"
+                "value": "[^xuU\\n]"
               },
               {
                 "type": "PATTERN",
@@ -163,7 +170,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^\\s,\\[\\]/][^\\s,\\[\\]]+"
+        "value": "[^\\s,\\[\\]/\"`][^\\s,\\[\\]]+"
       }
     },
     "_string_or_ident": {
@@ -571,7 +578,7 @@
     },
     "file_path": {
       "type": "SYMBOL",
-      "name": "_identifier"
+      "name": "_string_or_ident"
     },
     "retract_directive": {
       "type": "SEQ",
@@ -722,6 +729,158 @@
         {
           "type": "STRING",
           "value": "\n"
+        }
+      ]
+    },
+    "godebug_directive": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "godebug"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "STRING",
+                  "value": "\n"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "godebug_spec"
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                },
+                {
+                  "type": "STRING",
+                  "value": "\n"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "godebug_spec"
+            }
+          ]
+        }
+      ]
+    },
+    "godebug_spec": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "key",
+          "content": {
+            "type": "SYMBOL",
+            "name": "godebug_key"
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "="
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "value",
+              "content": {
+                "type": "SYMBOL",
+                "name": "godebug_value"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
+        }
+      ]
+    },
+    "godebug_key": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\s=,\"'`(){}\\[\\]/]+(\\/[^\\s=,\"'`(){}\\[\\]/*][^\\s=,\"'`(){}\\[\\]/]*)*"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "STRING",
+                "value": "/"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "godebug_value": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "/"
+          }
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "IMMEDIATE_TOKEN",
+              "content": {
+                "type": "PATTERN",
+                "value": "([^\\s,\"'`(){}\\[\\]/]|\\/[^\\s,\"'`(){}\\[\\]/*])+"
+              }
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "STRING",
+                    "value": "/"
+                  }
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

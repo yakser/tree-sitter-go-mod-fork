@@ -3,12 +3,50 @@ Module directive no parens
 ==================
 
 module golang.org/x/net
+module "example.com/a\"b"
+module  "github.com/rsc/vgotest"
+module  github.com/rsc/vgotest
+module `github.com/rsc/vgotest`
+module "github.com/rsc/vgotest/v2"
+module github.com/rsc/vgotest/v2
+module "gopkg.in/yaml.v2"
+module gopkg.in/yaml.v2
+module "   "
+module "  a/b/c  "
 
 ---
 
 (source_file
 	(module_directive
-		(module_path)))
+		(module_path))
+	(module_directive
+		(module_path
+			(interpreted_string_literal
+				(escape_sequence))))
+	(module_directive
+		(module_path
+			(interpreted_string_literal)))
+	(module_directive
+		(module_path))
+	(module_directive
+		(module_path
+			(raw_string_literal)))
+	(module_directive
+		(module_path
+			(interpreted_string_literal)))
+	(module_directive
+		(module_path))
+	(module_directive
+		(module_path
+			(interpreted_string_literal)))
+	(module_directive
+		(module_path))
+	(module_directive
+		(module_path
+			(interpreted_string_literal)))
+	(module_directive
+		(module_path
+			(interpreted_string_literal))))
 
 ==================
 Module directive parens
@@ -33,9 +71,80 @@ module (
 	golang.org/x/net // inline
 )
 
+// a
+
+// b
+module example.com/m // c
+// d
+
+// e
+
 ---
 
 (source_file
 	(module_directive
 		(module_path)
-		(comment)))
+		(comment))
+	(comment)
+	(comment)
+	(module_directive
+		(module_path))
+	(comment)
+	(comment)
+	(comment))
+
+==================
+Module bare path at EOF
+==================
+
+module github.com/rsc/vgotest
+---
+
+(source_file
+	(module_directive
+		(module_path)))
+
+==================
+Module quoted path at EOF
+==================
+
+module "github.com/rsc/vgotest"
+---
+
+(source_file
+	(module_directive
+		(module_path
+			(interpreted_string_literal))))
+
+==================
+Module raw path at EOF
+==================
+
+module `github.com/rsc/vgotest`
+---
+
+(source_file
+	(module_directive
+		(module_path
+			(raw_string_literal))))
+
+==================
+Module suffix comment at EOF
+==================
+
+module "github.com/rsc/vgotest1" // with a comment
+---
+
+(source_file
+	(module_directive
+		(module_path
+			(interpreted_string_literal)))
+	(comment))
+
+==================
+Module text after quoted path
+:error
+==================
+
+module "gopkg.in/check.v1"asd
+---

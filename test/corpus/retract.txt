@@ -3,19 +3,27 @@ Retract directive
 ==================
 
 retract v1.0.0
+retract "v1.2.3"
 
 ---
 
 (source_file
 	(retract_directive
 		(retract_spec
-			(version))))
+			(version)))
+	(retract_directive
+		(retract_spec
+			(version
+				(interpreted_string_literal)))))
 
 ==================
 Retract range
 ==================
 
 retract [v1.0.0, v1.9.9]
+retract ["v1.3.0", "v1.4.0"]
+retract [v1.2.3,v1.2.4]
+retract [ "v1.2.3" , "v1.2.4" ]
 
 ---
 
@@ -23,7 +31,23 @@ retract [v1.0.0, v1.9.9]
 	(retract_directive
 		(retract_spec
 			(version)
-			(version))))
+			(version)))
+	(retract_directive
+		(retract_spec
+			(version
+				(interpreted_string_literal))
+			(version
+				(interpreted_string_literal))))
+	(retract_directive
+		(retract_spec
+			(version)
+			(version)))
+	(retract_directive
+		(retract_spec
+			(version
+				(interpreted_string_literal))
+			(version
+				(interpreted_string_literal)))))
 
 ==================
 Retract multi
@@ -32,6 +56,15 @@ Retract multi
 retract (
     v1.0.0
     [v1.0.0, v1.9.9]
+    "v1.2.3"
+    ["v1.3.0", v1.4.0]
+)
+// block rationale
+retract (
+	// line rationale
+	v1.0.0 // suffix
+
+	[v1.2.3, v1.2.4]
 )
 
 ---
@@ -40,6 +73,22 @@ retract (
 	(retract_directive
 		(retract_spec
 			(version))
+		(retract_spec
+			(version)
+			(version))
+		(retract_spec
+			(version
+				(interpreted_string_literal)))
+		(retract_spec
+			(version
+				(interpreted_string_literal))
+			(version)))
+	(comment)
+	(retract_directive
+		(comment)
+		(retract_spec
+			(version)
+			(comment))
 		(retract_spec
 			(version)
 			(version))))

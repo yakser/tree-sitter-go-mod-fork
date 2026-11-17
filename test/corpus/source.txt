@@ -1,0 +1,60 @@
+==================
+Empty file
+==================
+
+---
+
+(source_file)
+
+==================
+Comment-only file
+==================
+
+// a
+// b
+
+---
+
+(source_file
+	(comment)
+	(comment))
+
+==================
+Recover after unknown directive
+==================
+
+module example.com/m
+surprise attack
+require good v1.0.0
+
+---
+
+(source_file
+	(module_directive
+		(module_path))
+	(ERROR
+		(UNEXPECTED 's'))
+	(require_directive
+		(require_spec
+			(module_path)
+			(version))))
+
+==================
+Directive order
+==================
+
+require x.y/a v1.2.3
+module example.com/inverted
+go 1.14
+
+---
+
+(source_file
+	(require_directive
+		(require_spec
+			(module_path)
+			(version)))
+	(module_directive
+		(module_path))
+	(go_directive
+		(go_version)))

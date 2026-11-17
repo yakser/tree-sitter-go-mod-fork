@@ -3,9 +3,24 @@ Toolchain directive comment
 ==================
 
 toolchain go1.21.5
+toolchain go1.2
+toolchain go1.2.3
+toolchain go1.2rc1
+toolchain go1.2rc1-gccgo
+toolchain default
 
 ---
 
 (source_file
 	(toolchain_directive
-		name: (toolchain_name)))
+		name: (toolchain_name))
+	(toolchain_directive name:
+		(toolchain_name))
+	(toolchain_directive name:
+		(toolchain_name))
+	(toolchain_directive name:
+		(toolchain_name))
+	(toolchain_directive name:
+		(toolchain_name))
+	(toolchain_directive name:
+		(toolchain_name)))

@@ -18,6 +18,7 @@ module.exports = grammar({
         $.replace_directive,
         $.retract_directive,
         $.ignore_directive,
+        $.godebug_directive,
       ),
 
     _string_literal: ($) =>
@@ -31,7 +32,7 @@ module.exports = grammar({
         repeat(
           choice(token.immediate(prec(1, /[^"\n\\]+/)), $.escape_sequence),
         ),
-        '"',
+        token.immediate('"'),
       ),
 
     escape_sequence: ($) =>
@@ -39,7 +40,7 @@ module.exports = grammar({
         seq(
           "\\",
           choice(
-            /[^xuU]/,
+            /[^xuU\n]/,
             /\d{2,3}/,
             /x[0-9a-fA-F]{2,}/,
             /u[0-9a-fA-F]{4}/,
@@ -48,7 +49,7 @@ module.exports = grammar({
         ),
       ),
 
-    _identifier: ($) => token(/[^\s,\[\]/][^\s,\[\]]+/),
+    _identifier: ($) => token(/[^\s,\[\]/"`][^\s,\[\]]+/),
 
     _string_or_ident: ($) => choice($._string_literal, $._identifier),
 
@@ -117,7 +118,7 @@ module.exports = grammar({
     tool_directive: ($) =>
       seq("tool", choice($.tool, seq("(", "\n", repeat($.tool), ")", "\n"))),
 
-    file_path: ($) => $._identifier,
+    file_path: ($) => $._string_or_ident,
 
     retract_directive: ($) =>
       seq(
@@ -144,6 +145,40 @@ module.exports = grammar({
       ),
 
     ignore_spec: ($) => seq($.file_path, "\n"),
+
+    godebug_directive: ($) =>
+      seq(
+        "godebug",
+        choice(
+          seq("(", "\n", repeat($.godebug_spec), ")", "\n"),
+          $.godebug_spec,
+        ),
+      ),
+
+    godebug_spec: ($) =>
+      seq(
+        field("key", $.godebug_key),
+        token.immediate("="),
+        optional(field("value", $.godebug_value)),
+        "\n",
+      ),
+
+    // Slashes inside tokens cannot start comments. Keep a trailing slash
+    // separate so that a following "//" is recognized as a comment.
+    godebug_key: ($) =>
+      seq(
+        token(/[^\s=,"'`(){}\[\]/]+(\/[^\s=,"'`(){}\[\]/*][^\s=,"'`(){}\[\]/]*)*/),
+        optional(token.immediate("/")),
+      ),
+
+    godebug_value: ($) =>
+      choice(
+        token.immediate("/"),
+        seq(
+          token.immediate(/([^\s,"'`(){}\[\]/]|\/[^\s,"'`(){}\[\]/*])+/),
+          optional(token.immediate("/")),
+        ),
+      ),
 
     comment: ($) => seq("//", /.*/),
   },

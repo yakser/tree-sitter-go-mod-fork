@@ -6,13 +6,41 @@
   "exclude"
   "retract"
   "module"
+  "godebug"
+  "tool"
+  "ignore"
 ] @keyword
 
-"=>" @operator
+[
+  "=>"
+  "="
+] @operator
+
+[
+  "("
+  ")"
+  "["
+  "]"
+] @punctuation.bracket
+
+"," @punctuation.delimiter
 
 (comment) @comment
 
 [
-(version)
-(go_version)
+  (module_path)
+  (file_path)
+  (tool)
 ] @string
+
+[
+  (version)
+  (go_version)
+  (toolchain_name)
+] @constant
+
+(godebug_key) @property
+
+(godebug_value) @constant
+
+(escape_sequence) @string.escape

@@ -3,13 +3,18 @@ Ignore directive single path
 ==================
 
 ignore ./node_modules
+ignore "./dir with space"
 
 ---
 
 (source_file
 	(ignore_directive
 		(ignore_spec
-			(file_path))))
+			(file_path)))
+	(ignore_directive
+		(ignore_spec
+			(file_path
+				(interpreted_string_literal)))))
 
 ==================
 Ignore directive parens single
@@ -46,4 +51,3 @@ ignore (
 			(file_path))
 		(ignore_spec
 			(file_path))))
-

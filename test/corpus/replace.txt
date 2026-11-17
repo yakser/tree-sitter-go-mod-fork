@@ -3,6 +3,15 @@ Replace directive
 ==================
 
 replace golang.org/x/net v1.2.3 => example.com/fork/net v1.4.5
+replace example.com/c => "../local dir//c"
+replace example.com/c v1.0.0 => `../my dir`
+replace example.com/d => "../dir/*literal*/"
+replace example.com/e => "../trailing space "
+replace "xyz" v1.2.3 => "./a,"
+replace "xyz" v1.2.3 => "./a()"
+replace "xyz" v1.2.3 => "./a[]"
+replace "xyz" v1.2.3 => "./a{}"
+replace "xyz" v1.2.3 => "/tmp/z"
 
 ---
 
@@ -12,7 +21,63 @@ replace golang.org/x/net v1.2.3 => example.com/fork/net v1.4.5
       (module_path)
       (version)
       (module_path)
-      (version))))
+      (version)))
+  (replace_directive
+    (replace_spec
+      (module_path)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path)
+      (version)
+      (file_path
+        (raw_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (file_path
+        (interpreted_string_literal))))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (file_path
+        (interpreted_string_literal)))))
 
 ==================
 Replace directive parens
@@ -24,6 +89,10 @@ replace (
     golang.org/x/net => example.com/fork/net v1.4.5
     golang.org/x/net v1.2.3 => ./fork/net
     golang.org/x/net => ./fork/net
+)
+replace (
+    "xyz" v1.3.4 => "my/xyz" "v1.3.4-me"
+    xyz "v1.4.5" => "/tmp/my dir"
 )
 
 ---
@@ -45,7 +114,22 @@ replace (
       (file_path))
     (replace_spec
       (module_path)
-      (file_path))))
+      (file_path)))
+  (replace_directive
+    (replace_spec
+      (module_path
+        (interpreted_string_literal))
+      (version)
+      (module_path
+        (interpreted_string_literal))
+      (version
+        (interpreted_string_literal)))
+    (replace_spec
+      (module_path)
+      (version
+        (interpreted_string_literal))
+      (file_path
+        (interpreted_string_literal)))))
 
 ==================
 Comments in block
@@ -73,3 +157,23 @@ replace (
       (module_path)
       (module_path)
       (version))))
+
+==================
+Quoted path with newline
+:error
+==================
+
+replace example.com/lib => "../local
+"
+
+---
+
+==================
+Quoted path with escaped newline
+:error
+==================
+
+replace example.com/lib => "../local\
+"
+
+---

@@ -3,9 +3,30 @@ Go directive comment
 ==================
 
 go 1.14
+go 1.22
+go 1.22.333
+go 1.2rc1
+go 1.2beta1
 
 ---
 
 (source_file
 	(go_directive
+		(go_version))
+	(go_directive
+		(go_version))
+	(go_directive
+		(go_version))
+	(go_directive
+		(go_version))
+	(go_directive
 		(go_version)))
+
+==================
+Go extra argument
+:error
+==================
+
+go 1.2 3.4
+
+---

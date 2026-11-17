@@ -3,6 +3,7 @@ Require directive
 ==================
 
 require cloud.google.com/go v0.76.0
+require "example.com/lib" "v1.2.3"
 
 ---
 
@@ -10,7 +11,13 @@ require cloud.google.com/go v0.76.0
 	(require_directive
 		(require_spec
 			(module_path)
-			(version))))
+			(version)))
+	(require_directive
+		(require_spec
+			(module_path
+				(interpreted_string_literal))
+			(version
+				(interpreted_string_literal)))))
 
 ==================
 Require directive parens
@@ -35,7 +42,33 @@ Require directive parens multiple
 require (
 		cloud.google.com/go v0.76.0
 		cloud.google.com/go v0.76.0
+		example.com/a "v1.2.3"
+		"example.com/b" "v1.4.0"
 )
+require (
+
+		"golang.org/x/time" v0.8.0
+
+		gopkg.in/mgo.v2 v2.0.0-20160818020120-3f83fa500528
+		gopkg.in/yaml.v2 v2.2.1 //indirect
+)
+require example.com/another v1.2.3 // indirect
+
+// a
+
+// b
+require ( // c
+	// d
+
+	// e
+	example.com/x v1.0.0 // f
+	// g
+
+	// h
+) // i
+// j
+
+// k
 
 ---
 
@@ -46,4 +79,45 @@ require (
 			(version))
 		(require_spec
 			(module_path)
-			(version))))
+			(version))
+		(require_spec
+			(module_path)
+			(version
+				(interpreted_string_literal)))
+		(require_spec
+			(module_path
+				(interpreted_string_literal))
+			(version
+				(interpreted_string_literal))))
+	(require_directive
+		(require_spec
+			(module_path
+				(interpreted_string_literal))
+			(version))
+		(require_spec
+			(module_path)
+			(version))
+		(require_spec
+			(module_path)
+			(version)
+			(comment)))
+	(require_directive
+		(require_spec
+			(module_path)
+			(version)
+			(comment)))
+	(comment)
+	(comment)
+	(require_directive
+		(comment)
+		(comment)
+		(comment)
+		(require_spec
+			(module_path)
+			(version)
+			(comment))
+		(comment)
+		(comment)
+		(comment))
+	(comment)
+	(comment))

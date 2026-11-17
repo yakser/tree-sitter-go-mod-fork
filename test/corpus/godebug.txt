@@ -1,0 +1,148 @@
+==================
+Godebug directive
+==================
+
+godebug default=go1.21
+godebug panicnil=1//comment
+godebug panicnil=//comment
+
+---
+
+(source_file
+	(godebug_directive
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)))
+	(godebug_directive
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)
+			(comment)))
+	(godebug_directive
+		(godebug_spec
+			key: (godebug_key)
+			(comment))))
+
+==================
+Godebug block
+==================
+
+godebug (
+	panicnil=1
+	// disable for now
+	http2client=0 // trailing
+	asynctimerchan=
+	x509keypair=a=b
+	panicnil=a/b//comment
+	panicnil=/a/b//comment
+	panicnil=a/
+	panicnil=/
+	key/path=value
+	key/=value
+	key*=a*b
+)
+godebug key=second // second
+godebug (
+	key=third // third
+	other=third-a// third-a
+)
+
+---
+
+(source_file
+	(godebug_directive
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(comment)
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)
+			(comment))
+		(godebug_spec
+			key: (godebug_key))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)
+			(comment))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)
+			(comment))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value)))
+	(godebug_directive
+		(godebug_spec key:
+			(godebug_key) value:
+			(godebug_value)
+			(comment)))
+	(godebug_directive
+		(godebug_spec key:
+			(godebug_key) value:
+			(godebug_value)
+			(comment))
+		(godebug_spec key:
+			(godebug_key) value:
+			(godebug_value)
+			(comment))))
+
+==================
+Godebug after go directive
+==================
+
+go 1.24
+
+godebug panicnil=1
+
+---
+
+(source_file
+	(go_directive
+		(go_version))
+	(godebug_directive
+		(godebug_spec
+			key: (godebug_key)
+			value: (godebug_value))))
+
+==================
+Godebug comment before equals
+:error
+==================
+
+godebug panicnil//comment=1
+
+---
+
+==================
+Godebug block comment in key
+:error
+==================
+
+godebug panicnil/*comment*/=1
+
+---
+
+==================
+Godebug block comment in value
+:error
+==================
+
+godebug panicnil=1/*comment*/
+
+---

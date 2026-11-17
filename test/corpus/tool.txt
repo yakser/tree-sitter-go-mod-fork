@@ -17,3 +17,14 @@ tool (
 	(tool_directive
 		(tool)
 		(tool)))
+
+==================
+Tool directive at EOF
+==================
+
+tool example.com/tool1
+---
+
+(source_file
+	(tool_directive
+		(tool)))
